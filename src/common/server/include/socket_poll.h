@@ -1,19 +1,20 @@
 //
-// Created by 92486 on 2024/1/19.
+// Created by lsill on 2024/1/19.
 //
 
 #ifndef DXIAN_SOCKET_POLL_H
 #define DXIAN_SOCKET_POLL_H
 
-#ifdef __linix__
+#ifdef __linux__
 #include "socket_epoll.h"
-#endif
-
-#ifdef defined(__APPLE__)
+#elif defined(__APPLE__)
 #include "socket_kqueue.h"
 #endif
 
 #include <stdbool.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <netinet/in.h>
 
 typedef int poll_fd;
 
@@ -33,5 +34,21 @@ static void sp_del(poll_fd fd, int sock);
 static void sp_enable(poll_fd, int sock, void* ud, bool read_enable, bool write_enable);
 static int sp_wait(poll_fd, struct event* e, int max);
 static void sp_nonblocking(int sock);
+
+class socket {
+public:
+    explicit socket(int fd):fd_(fd), valid_(fd>=0) {}
+    virtual ~socket() {
+        if (valid_) {
+            close(fd_);
+        }
+    }
+    int get_socket_fd() const {return fd_;}
+    bool is_valid() const {return valid_;}
+
+private:
+    int fd_;
+    bool valid_;
+};
 
 #endif //DXIAN_SOCKET_POLL_H

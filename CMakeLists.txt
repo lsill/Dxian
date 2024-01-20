@@ -4,6 +4,14 @@ message(STATUS "CMake Version:${CMAKE_VERSION}")
 
 project(DXian)
 
+# TO_CMAKE_PATH 将提供的路径转换成CMake风格路径
+file(TO_CMAKE_PATH ${PROJECT_BINARY_DIR}/CMakeLists.txt, PATH_TO_CMAKE_TXT)
+if (EXISTS "${PATH_TO_CMAKE_TXT}")
+    message(FATAL_ERROR "Run CMake from a build subdirectory! \"mkdir build ; cd build ; cmake .. \" \
+    Some junk files were created in this folder (CMakeCache.txt, CMakeFiles); you should delete those.")
+endif ()
+message(${PATH_TO_CMAKE_TXT})
+
 # set(CMAKE_DISABLE_SOURCE_CHANGES ON) 防止构建过程修改源代码。
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON) # 禁止在源代码目录内进行构建
 
@@ -16,4 +24,6 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH 0)
 
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
-add_subdirectory(src/common)
+SET(SERVER_INCLUDE ${PROJECT_SOURCE_DIR}/src/common/server/include)
+
+add_subdirectory(src/common/server)
