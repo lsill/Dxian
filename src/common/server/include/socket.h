@@ -24,6 +24,8 @@ public:
     virtual void connect(const std::string& host, int port) = 0;
     virtual ssize_t send(const char* buffer, size_t length) = 0;
     virtual ssize_t receive(char* buffer, size_t length) = 0;
+    virtual bool valid() const = 0;
+    virtual int fd() const = 0;
 };
 
 class tcp_socket : public ISocket {
@@ -68,6 +70,8 @@ public:
         return 0;
     }
 
+    bool valid() const override {return valid_;}
+    int fd() const override{return fd_;}
 
 private:
     friend std::unique_ptr<tcp_socket> std::make_unique<tcp_socket, int&>(int&);
