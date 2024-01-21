@@ -3,4 +3,5 @@
 //
 
 #include "serverapp.h"
+#include "socket.h"
 
