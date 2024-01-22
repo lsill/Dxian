@@ -15,6 +15,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "socket_poll.h"
 
 static bool
 sp_invalid(int kfd) {

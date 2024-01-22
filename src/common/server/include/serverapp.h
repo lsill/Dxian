@@ -5,6 +5,10 @@
 #ifndef DXIAN_SERVERAPP_H
 #define DXIAN_SERVERAPP_H
 #include "socket_poll.h"
+#include "tcp_socket.h"
+
+#define MAX_EVENT 64
+
 
 class ServerApp {
 public:
@@ -14,44 +18,25 @@ public:
             sp_release(efd);
         }
     }
+    bool init();
 
-    bool init() {
-        efd = sp_create();
-        return !sp_invalid(efd);
-    }
-
-    bool add_socket(int sock, void *ud) {
+    bool add_socket(int sock, void *ud) const {
         return sp_add(efd, sock, ud);
     }
 
-    void remove_socket(int sock) {
+    void remove_socket(int sock) const {
         sp_del(efd, sock);
     }
 
-    void enable_socket(int sock, void* ud, bool b_read, bool b_write) {
+    void enable_socket(int sock, void* ud, bool b_read, bool b_write) const {
         sp_enable(efd, sock, ud, b_read, b_write);
     }
 
-    void run() {
-        const int MAX_EVENTS = 1024;
-        struct event events[MAX_EVENTS];
-
-        while (true) {
-            int n = sp_wait(efd, events, MAX_EVENTS);
-            for (int i = 0; i < n;i++) {
-                if (events[i].error || events[i].eof) {
-                    // handle error or eof
-                } else if (events[i].read){
-                    // handle read
-                } else if (events[i].write) {
-                    // handle write
-                }
-            }
-        }
-    }
+    [[noreturn]] void run();
 
 private:
     int efd;
+    std::unique_ptr<ISocket> socket;
 };
 
 #endif //DXIAN_SERVERAPP_H

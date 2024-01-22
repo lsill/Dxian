@@ -1,9 +1,0 @@
-[{
-  "file": "F:\\github\\Dxian\\Dxian\\server\\main.cpp",
-  "directory": "F:\\github\\Dxian\\Dxian\\server",
-  "command": "C:/msys64/mingw64/bin/g++.exe -c F:\\github\\Dxian\\Dxian\\server\\main.cpp -o F:\\github\\Dxian\\Dxian\\server\\main.cpp.o -target x86_64-w64-mingw32 -IC:\\msys64\\mingw64\\include\\c++\\13.2.0 -IC:\\msys64\\mingw64\\include\\c++\\13.2.0\\x86_64-w64-mingw32 -IC:\\msys64\\mingw64\\include\\c++\\13.2.0\\backward -IC:\\msys64\\mingw64\\lib\\gcc\\x86_64-w64-mingw32\\13.2.0\\include -IC:\\msys64\\mingw64\\include -IC:\\msys64\\mingw64\\lib\\gcc\\x86_64-w64-mingw32\\13.2.0\\include-fixed -I. -I.  -O0  -gdwarf-2  -std=c++17  -Wall"
- }, {
-  "file": "F:\\github\\Dxian\\Dxian\\server\\socket_poll.h",
-  "directory": "F:\\github\\Dxian\\Dxian\\server",
-  "command": "C:/msys64/mingw64/bin/g++.exe -c F:\\github\\Dxian\\Dxian\\server\\socket_poll.h -o F:\\github\\Dxian\\Dxian\\server\\socket_poll.h.o -target x86_64-w64-mingw32 -IC:\\msys64\\mingw64\\include\\c++\\13.2.0 -IC:\\msys64\\mingw64\\include\\c++\\13.2.0\\x86_64-w64-mingw32 -IC:\\msys64\\mingw64\\include\\c++\\13.2.0\\backward -IC:\\msys64\\mingw64\\lib\\gcc\\x86_64-w64-mingw32\\13.2.0\\include -IC:\\msys64\\mingw64\\include -IC:\\msys64\\mingw64\\lib\\gcc\\x86_64-w64-mingw32\\13.2.0\\include-fixed -I. -I.  -O0  -gdwarf-2  -std=c++17  -Wall"
- }]

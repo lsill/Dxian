@@ -4,6 +4,23 @@ message(STATUS "CMake Version:${CMAKE_VERSION}")
 
 project(DXian)
 
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON) # 生成compile_commands.json 查看编译单元所执行指令
+SET(BUILD_SHARED_LIBS ON)  # 没有指定生成什么库 默认静态
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON) # 必须支持20
+
+# 检查操作系统
+if(APPLE)
+    message(STATUS "On Apple systems, Clang is recommended.")
+    # 设置 Clang 相关的特定标志或配置
+    set(CMAKE_C_COMPILER clang)
+    set(CMAKE_CXX_COMPILER clang++)
+elseif(UNIX AND NOT APPLE)
+    message(STATUS "On Linux systems, GCC is recommended.")
+    set(CMAKE_C_COMPILER gcc)
+    set(CMAKE_CXX_COMPILER g++)
+endif()
+
 # TO_CMAKE_PATH 将提供的路径转换成CMake风格路径
 file(TO_CMAKE_PATH ${PROJECT_BINARY_DIR}/CMakeLists.txt, PATH_TO_CMAKE_TXT)
 if (EXISTS "${PATH_TO_CMAKE_TXT}")
