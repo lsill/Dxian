@@ -35,7 +35,7 @@ public:
 
 class tcp_socket : public ISocket {
 public:
-    tcp_socket();
+
 
     void bind(const std::string& host, int port) override {
         struct sockaddr_in addr{};
@@ -80,6 +80,8 @@ public:
 
 private:
     friend std::unique_ptr<tcp_socket> std::make_unique<tcp_socket, int&>(int&);
+    friend std::unique_ptr<tcp_socket> std::make_unique<tcp_socket>();
+    tcp_socket();
     explicit tcp_socket(int fd):fd_(fd), valid_(fd >= 0) {}
     int fd_;
     int valid_;
