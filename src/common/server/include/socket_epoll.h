@@ -14,7 +14,6 @@
 #include <sys/socket.h> // 提供了套接字接口，用于创建套接字、绑定、监听、接收和发送数据等。这是网络编程中最核心的头文件之一。
 #include <netinet/in.h> // 定义了互联网协议族的数据结构和操作函数，如 IP 地址和端口号的结构体（如 sockaddr_in）。
 #include <arpa/inet.h>   // 提供了用于操作网络地址的函数，如 IP 地址转换函数（如 inet_pton 和 inet_ntop）。
-#include "socket_poll.h"
 
 static bool
 sp_invalid(int efd){

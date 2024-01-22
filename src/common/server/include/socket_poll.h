@@ -5,6 +5,7 @@
 #ifndef DXIAN_SOCKET_POLL_H
 #define DXIAN_SOCKET_POLL_H
 
+
 // #include <stdbool.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -26,7 +27,7 @@ static void sp_release(poll_fd fd);
 static int sp_add(poll_fd fd, int sock, void* ud);
 static void sp_del(poll_fd fd, int sock);
 static int sp_enable(poll_fd, int sock, void *ud, bool read_enable, bool write_enable);
-static int sp_wait(poll_fd, struct event* e, int max);
+static int sp_wait(poll_fd,  event* e, int max);
 static void sp_nonblocking(int sock);
 
 

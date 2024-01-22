@@ -3,6 +3,7 @@
 //
 #include "tcp_socket.h"
 #include <iostream>
+#include <memory>
 
 using std::cout;
 using std::cin;
@@ -10,7 +11,7 @@ using std::endl;
 
 int main() {
     cout << "hello world!\n ";
-    ISocket* tcp_soc = new tcp_socket();
+    ISocket* tcp_soc = std::make_unique<tcp_socket>();
     tcp_soc->bind("127.0.0.1", 9534);
     tcp_soc->listen(10);
     while (true) {

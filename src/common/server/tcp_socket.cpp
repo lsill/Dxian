@@ -2,6 +2,7 @@
 // Created by lsill on 2024/1/22.
 //
 #include "tcp_socket.h"
+#include <unistd.h>
 
 tcp_socket::tcp_socket() {
     fd_ = socket(AF_INET, SOCK_STREAM, 0);
