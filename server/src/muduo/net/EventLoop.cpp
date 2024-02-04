@@ -40,3 +40,7 @@ void EventLoop::loop() {
     LOG_TRACE<<"EventLoop "<< this << " stop looping";
     lopping_ = false;
 }
+
+void EventLoop::abortNotInLoopThread() {
+
+}
