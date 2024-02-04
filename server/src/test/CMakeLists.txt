@@ -1,4 +1,4 @@
-file(GLOB DX_TEST_SOURCES "${PROJECT_SOURCE_DIR}/src/test/*.cpp")
+file(GLOB DX_TEST_SOURCES "../test/*.cpp")
 
 include_directories(${SERVER_INCLUDE})
 

@@ -48,8 +48,11 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # CMAKE_RUNTIME_OUTPUT_DIRECTORY 可执行文件输出目录s
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+find_package(Boost REQUIRED)
 
-SET(SERVER_INCLUDE ${PROJECT_SOURCE_DIR}/src/common/server/include)
+SET(DNT_BASE_INCLUDE muduo/base/include)
+SET(DNT_NET_INCLUDE muduo/net/include)
 
-add_subdirectory(src/common/server)
-add_subdirectory(src/test)
+add_subdirectory(muduo/base)
+add_subdirectory(muduo/net)
+add_subdirectory(test)
