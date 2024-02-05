@@ -54,7 +54,7 @@ void Channel::handleEvent(muduo::Timestamp receiveTime) {
     }
 
 #if __linux__
-    if (revents_ & (POLLIN | POLLPRI | POLLRDHUB)) {
+    if (revents_ & (POLLIN | POLLPRI)) {  //| POLLRDHUB
 #elif __APPLE__
     if (revents_ & (POLLIN | POLLPRI )) {
 #endif
