@@ -9,6 +9,9 @@ SET(BUILD_SHARED_LIBS ON)  # 没有指定生成什么库 默认静态
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON) # 必须支持20
 
+# 设置构建类型为Debug
+set(CMAKE_BUILD_TYPE Debug)
+
 # 检查操作系统
 if(APPLE)
     message(STATUS "On Apple systems, Clang is recommended.")

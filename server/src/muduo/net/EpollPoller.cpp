@@ -342,7 +342,7 @@ void EPollPoller::update(int operation, Channel* channel)
   event.data.ptr = channel;
   int fd = channel->fd();
   LOG_TRACE << "epoll_ctl op = " << operationToString(operation)
-    << " fd = " << fd << " event = { " << channel->eventsToString() << " }";
+    << " fd = " << fd;// << " event = { " << channel->eventsToString() << " }"; TODO 这里后面在加
   if (::epoll_ctl(epollfd_, operation, fd, &event) < 0)
   {
     if (operation == EPOLL_CTL_DEL)

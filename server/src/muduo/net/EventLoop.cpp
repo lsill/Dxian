@@ -5,6 +5,7 @@
 #include "include/TimerId.h"
 #include "include/Poller.h"
 #include "include/Channel.h"
+#include "CurrentThread.h"
 #include "Logging.h"
 
 #include "poll.h"
@@ -15,7 +16,7 @@ using namespace muduo::net;
 thread_local EventLoop* t_loopInThisThread = nullptr;
 const int kPollTimeMs = 10000;
 
-EventLoop::EventLoop():lopping_(false),threadId_(CurrentThread::tid()) {
+EventLoop::EventLoop():lopping_(false),threadId_(CurrentThread::tid()),quit_(false), poller_(Poller::newDefaultPoller(this)) {
     LOG_TRACE << "EventLoop created" << this << " in thread" << threadId_;
     if (t_loopInThisThread) {
         LOG_FATAL << "Another EventLoop "<< t_loopInThisThread << "exists in this thread" << threadId_;
