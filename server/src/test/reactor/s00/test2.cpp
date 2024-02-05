@@ -4,7 +4,7 @@
 #include "EventLoop.h"
 #include "Thread.h"
 
-muduo::EventLoop* g_loop;
+muduo::net::EventLoop* g_loop;
 
 void threadFunc() {
     g_loop->loop();
@@ -12,7 +12,7 @@ void threadFunc() {
 
 int main()
 {
-    muduo::EventLoop loop;
+    muduo::net::EventLoop loop;
     g_loop = &loop;
     muduo::Thread t(threadFunc);
     t.start();

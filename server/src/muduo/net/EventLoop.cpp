@@ -8,6 +8,7 @@
 #include "poll.h"
 
 using namespace muduo;
+using namespace muduo::net;
 
 thread_local EventLoop* t_loopInThisThread = nullptr;
 
@@ -42,5 +43,9 @@ void EventLoop::loop() {
 }
 
 void EventLoop::abortNotInLoopThread() {
+
+}
+
+void EventLoop::updateChannel(muduo::net::Channel *channel) {
 
 }
