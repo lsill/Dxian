@@ -13,7 +13,7 @@ target_link_libraries(test2
         PRIVATE
         base
         net)
-
+include_directories(${Boost_INCLUDE_DIRS})
 target_include_directories(test1 PUBLIC "${CMAKE_SOURCE_DIR}/muduo/base/include")
 target_include_directories(test1 PUBLIC "${CMAKE_SOURCE_DIR}/muduo/net/include")
 

@@ -3,8 +3,11 @@
 //
 #include "EventLoop.h"
 #include "Thread.h"
-#include <stdio.h>
+#include <cstdio>
 
+#ifndef __APPLE__
+#include <unistd.h>
+#endif
 
 void threadFunc()
 {
