@@ -7,7 +7,7 @@
 
 #include <sstream>
 #ifdef __linux__
-#define _GNU_SOURCE
+#define _GNU_SOURCE 1
 #endif
 #include "poll.h"
 
