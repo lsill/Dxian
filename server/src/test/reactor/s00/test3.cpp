@@ -11,7 +11,7 @@
 
 muduo::net::EventLoop* g_loop;
 
-void timeout(Timestamp receiveTime)
+void timeout(muduo::net::Timestamp receiveTime)
 {
     printf("Timeout!\n");
     g_loop->quit();
