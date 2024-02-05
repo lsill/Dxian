@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <sys/timerfd.h>
 
-muduo::EventLoop* g_loop;
+muduo::net::EventLoop* g_loop;
 
 void timeout()
 {
