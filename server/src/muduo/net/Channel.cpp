@@ -6,9 +6,6 @@
 #include "include/Channel.h"
 
 #include <sstream>
-#ifdef __linux__
-#define _GNU_SOURCE
-#endif
 #include "poll.h"
 
 using namespace muduo;
