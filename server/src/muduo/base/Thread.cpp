@@ -13,10 +13,15 @@
 #include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/prctl.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
+#ifdef __linux__
 #include <linux/unistd.h>
+#include <sys/prctl.h>
+#elif defined(__APPLE__) && defined(__MACH__)
+#include <pthread.h>
+#endif
+
 
 namespace muduo
 {
@@ -67,6 +72,13 @@ namespace muduo
                       latch_(latch)
             { }
 
+            void setThreadName(const char* threadName) {
+#if defined(__linux__)
+                ::prctl(PR_SET_NAME, threadName);
+#elif defined(__APPLE__) && defined(__MACH__)
+                pthread_setname_np(threadName);
+#endif
+            }
             void runInThread()
             {
                 *tid_ = muduo::CurrentThread::tid();
@@ -75,7 +87,7 @@ namespace muduo
                 latch_ = NULL;
 
                 muduo::CurrentThread::t_threadName = name_.empty() ? "muduoThread" : name_.c_str();
-                ::prctl(PR_SET_NAME, muduo::CurrentThread::t_threadName);
+                setThreadName(muduo::CurrentThread::t_threadName);
                 try
                 {
                     func_();
