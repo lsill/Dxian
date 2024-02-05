@@ -24,9 +24,7 @@ Channel::Channel(EventLoop* loop, int fd__)
           logHup_(true),
           tied_(false),
           eventHandling_(false),
-          addedToLoop_(false)
-{
-}
+          addedToLoop_(false){}
 
 Channel::~Channel()
 {

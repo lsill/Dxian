@@ -3,6 +3,8 @@
 //
 #include "include/EventLoop.h"
 #include "include/TimerId.h"
+#include "include/Poller.h"
+#include "include/Channel.h"
 #include "Logging.h"
 
 #include "poll.h"
@@ -11,6 +13,7 @@ using namespace muduo;
 using namespace muduo::net;
 
 thread_local EventLoop* t_loopInThisThread = nullptr;
+const int kPollTimeMs = 10000;
 
 EventLoop::EventLoop():lopping_(false),threadId_(CurrentThread::tid()) {
     LOG_TRACE << "EventLoop created" << this << " in thread" << threadId_;
@@ -36,7 +39,14 @@ void EventLoop::loop() {
     assert(!lopping_);
     assertInLoopThread();
     lopping_ = true;
-    ::poll(nullptr, 0, 5*1000);
+    quit_ = false;
+    while (!quit_) {
+        activeChannels_.clear();
+        poller_->poll(kPollTimeMs, &activeChannels_);
+        for (auto & activeChannel : activeChannels_) {
+            activeChannel->handleEvent(Timestamp::now());
+        }
+    }
 
     LOG_TRACE<<"EventLoop "<< this << " stop looping";
     lopping_ = false;
@@ -47,5 +57,7 @@ void EventLoop::abortNotInLoopThread() {
 }
 
 void EventLoop::updateChannel(muduo::net::Channel *channel) {
-
+    assert(channel->ownerLoop() == this);
+    assertInLoopThread();
+    poller_->updateChannel(channel);
 }

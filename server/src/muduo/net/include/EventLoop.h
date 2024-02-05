@@ -20,6 +20,7 @@
 namespace muduo{
 namespace net {
 class Channel;
+class Poller;
     class EventLoop : noncopyable {
     public:
         EventLoop();
@@ -42,9 +43,13 @@ class Channel;
 
     private:
         void abortNotInLoopThread();
+        typedef std::vector<Channel*> ChannelList;
 
-        bool lopping_;
+        bool lopping_;  // *atomic
+        bool quit_; // *atomic
         const pid_t threadId_;
+        std::unique_ptr<Poller> poller_;
+        ChannelList activeChannels_;
     };
 
 }//namespace  net
