@@ -1,4 +1,4 @@
 cmake-build-debug
 build
 .cache
-test/reactor/s00/bin
+test/reactor/s00/bin/*
