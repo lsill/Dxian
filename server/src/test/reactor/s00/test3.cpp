@@ -36,3 +36,10 @@ int main()
     ::close(timerfd);
 }
 #endif
+
+#ifdef __APPLE__
+int main()
+{
+
+}
+#endif

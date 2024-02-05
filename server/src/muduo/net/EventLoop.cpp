@@ -52,6 +52,10 @@ void EventLoop::loop() {
     lopping_ = false;
 }
 
+void EventLoop::quit() {
+    quit_ = true;
+}
+
 void EventLoop::abortNotInLoopThread() {
 
 }

@@ -28,6 +28,7 @@ class Poller;
         ~EventLoop();
 
         void loop();
+        void quit();
 
         void assertInLoopThread() {
             if (!isInLoopThread()) {
