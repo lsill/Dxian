@@ -4,13 +4,14 @@
 #ifdef __linux__
 #include "Channel.h"
 #include "EventLoop.h"
+#include "Timestamp.h"
 
 #include <stdio.h>
 #include <sys/timerfd.h>
 
 muduo::net::EventLoop* g_loop;
 
-void timeout()
+void timeout(Timestamp receiveTime)
 {
     printf("Timeout!\n");
     g_loop->quit();
