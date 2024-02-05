@@ -5,10 +5,6 @@
 #include "Thread.h"
 #include <cstdio>
 
-#ifndef __APPLE__
-#include <unistd.h>
-#endif
-
 void threadFunc()
 {
     printf("threadFunc(): pid = %d, tid = %d\n",
@@ -29,6 +25,6 @@ int main()
     thread.start();
 
     loop.loop();
-    pthread_exit(NULL);
+    pthread_exit(nullptr);
     return 0;
 }

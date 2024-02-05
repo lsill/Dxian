@@ -20,6 +20,7 @@
 #include <sys/prctl.h>
 #elif defined(__APPLE__) && defined(__MACH__)
 #include <pthread.h>
+#include <mach/mach.h>
 #endif
 
 
@@ -30,7 +31,13 @@ namespace muduo
 
         pid_t gettid()
         {
+#if __linux__
             return static_cast<pid_t>(::syscall(SYS_gettid));
+#elif __APPLE__
+            // TODO 这个做法没有任何意思 只是为了编译好看，pthread_self()才是mac进程唯一标识符
+            mach_port_t machTID = pthread_mach_thread_np(pthread_self());
+            return static_cast<pid_t>(machTID);
+#endif
         }
 
         void afterFork()
