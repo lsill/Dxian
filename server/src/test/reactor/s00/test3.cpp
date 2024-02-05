@@ -18,11 +18,11 @@ void timeout()
 
 int main()
 {
-    muduo::EventLoop loop;
+    muduo::net::EventLoop loop;
     g_loop = &loop;
 
     int timerfd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
-    muduo::Channel channel(&loop, timerfd);
+    muduo::net::Channel channel(&loop, timerfd);
     channel.setReadCallback(timeout);
     channel.enableReading();
 
