@@ -36,7 +36,7 @@ void run1()
 
 int main()
 {
-    printf("main(): pid = %d, flag = %d\n", getpid(), g_flag);
+    printf("main(): pid = %d, flag = %d\n", getpid(), g_flag);// 0
 
     muduo::net::EventLoop loop;
     g_loop = &loop;

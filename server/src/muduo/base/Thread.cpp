@@ -89,9 +89,9 @@ namespace muduo
             void runInThread()
             {
                 *tid_ = muduo::CurrentThread::tid();
-                tid_ = NULL;
+                tid_ = nullptr;
                 latch_->countDown();
-                latch_ = NULL;
+                latch_ = nullptr;
 
                 muduo::CurrentThread::t_threadName = name_.empty() ? "muduoThread" : name_.c_str();
                 setThreadName(muduo::CurrentThread::t_threadName);
@@ -129,7 +129,7 @@ namespace muduo
             ThreadData* data = static_cast<ThreadData*>(obj);
             data->runInThread();
             delete data;
-            return NULL;
+            return nullptr;
         }
 
     }  // namespace detail
@@ -195,7 +195,7 @@ namespace muduo
         started_ = true;
         // FIXME: move(func_)
         detail::ThreadData* data = new detail::ThreadData(func_, name_, &tid_, &latch_);
-        if (pthread_create(&pthreadId_, NULL, &detail::startThread, data))
+        if (pthread_create(&pthreadId_, nullptr, &detail::startThread, data))
         {
             started_ = false;
             delete data; // or no delete?

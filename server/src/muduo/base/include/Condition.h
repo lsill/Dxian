@@ -18,7 +18,7 @@ namespace muduo
         explicit Condition(MutexLock& mutex)
                 : mutex_(mutex)
         {
-            MCHECK(pthread_cond_init(&pcond_, NULL));
+            MCHECK(pthread_cond_init(&pcond_, nullptr));
         }
 
         ~Condition()
