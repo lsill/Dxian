@@ -10,6 +10,7 @@
 #include "Logging.h"
 
 #include "poll.h"
+#include <sys/eventfd.h>
 
 using namespace muduo;
 using namespace muduo::net;
@@ -17,22 +18,56 @@ using namespace muduo::net;
 thread_local EventLoop* t_loopInThisThread = nullptr;
 const int kPollTimeMs = 10000;
 
-EventLoop::EventLoop():looping_(false),threadId_(CurrentThread::tid()),quit_(false), poller_(Poller::newDefaultPoller(this)) {
-    LOG_TRACE << "EventLoop created" << this << " in thread" << threadId_;
-    if (t_loopInThisThread) {
-        LOG_FATAL << "Another EventLoop "<< t_loopInThisThread << "exists in this thread" << threadId_;
-    } else {
+int createEventfd()
+{
+    int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+    if (evtfd < 0)
+    {
+        LOG_SYSERR << "Failed in eventfd";
+        abort();
+    }
+    return evtfd;
+}
+
+
+EventLoop::EventLoop()
+        : looping_(false),
+          quit_(false),
+          eventHandling_(false),
+          callingPendingFunctors_(false),
+          iteration_(0),
+          threadId_(CurrentThread::tid()),
+          poller_(Poller::newDefaultPoller(this)),
+          timerQueue_(new TimerQueue(this)),
+          wakeupFd_(createEventfd()),
+          wakeupChannel_(new Channel(this, wakeupFd_)),
+          currentActiveChannel_(nullptr)
+{
+    LOG_DEBUG << "EventLoop created " << this << " in thread " << threadId_;
+    if (t_loopInThisThread)
+    {
+        LOG_FATAL << "Another EventLoop " << t_loopInThisThread
+                  << " exists in this thread " << threadId_;
+    }
+    else
+    {
         t_loopInThisThread = this;
     }
+    wakeupChannel_->setReadCallback(
+            std::bind(&EventLoop::handleRead, this));
+    // we are always reading the wakeupfd
+    wakeupChannel_->enableReading();
 }
 
-EventLoop::~EventLoop() {
-    // assert是一个宏，用于在运行时对表达式进行断言检查。如果表达式计算为假（即0），
-    // assert 宏会导致程序终止，并打印一条错误消息，指出断言失败的文件名和行号。
-    assert(!looping_);
+EventLoop::~EventLoop()
+{
+    LOG_DEBUG << "EventLoop " << this << " of thread " << threadId_
+              << " destructs in thread " << CurrentThread::tid();
+    wakeupChannel_->disableAll();
+    wakeupChannel_->remove();
+    ::close(wakeupFd_);
     t_loopInThisThread = nullptr;
 }
-
 EventLoop *EventLoop::getEventLoopOfCurrentThread() {
     return t_loopInThisThread;
 }
