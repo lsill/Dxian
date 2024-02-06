@@ -6,6 +6,7 @@
 #include "include/Poller.h"
 #include "include/Channel.h"
 #include "include/TimerQueue.h"
+#include "include/SocketOps.h"
 #include "CurrentThread.h"
 #include "Logging.h"
 
@@ -15,6 +16,7 @@
 
 using namespace muduo;
 using namespace muduo::net;
+using namespace muduo::sockets;
 
 thread_local EventLoop* t_loopInThisThread = nullptr;
 const int kPollTimeMs = 10000;
