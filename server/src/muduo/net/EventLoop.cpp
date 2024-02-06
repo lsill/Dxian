@@ -9,8 +9,9 @@
 #include "CurrentThread.h"
 #include "Logging.h"
 
-#include "poll.h"
 #include <sys/eventfd.h>
+#include <unistd.h>
+#include <signal.h>
 
 using namespace muduo;
 using namespace muduo::net;
@@ -126,4 +127,13 @@ void EventLoop::updateChannel(muduo::net::Channel *channel) {
     assert(channel->ownerLoop() == this);
     assertInLoopThread();
     poller_->updateChannel(channel);
+}
+
+void EventLoop::handleRead() {
+    uint64_t one = 1;
+    ssize_t n = sockets::read(wakeupFd_, &one, sizeof one);
+    if (n != sizeof one)
+    {
+        LOG_ERROR << "EventLoop::handleRead() reads " << n << " bytes instead of 8";
+    }
 }
