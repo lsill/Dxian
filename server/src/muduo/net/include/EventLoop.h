@@ -23,12 +23,20 @@ class Channel;
 class Poller;
     class EventLoop : noncopyable {
     public:
+        typedef std::function<void()> Functor;
+
         EventLoop();
 
         ~EventLoop();
 
         void loop();
         void quit();
+
+        /// Runs callback immediately in the loop thread.
+        /// It wakes up the loop, and run the cb.
+        /// If in the same loop thread, cb is run within the function.
+        /// Safe to call from other threads.
+        void runInLoop(Functor cb);
 
         void assertInLoopThread() {
             if (!isInLoopThread()) {

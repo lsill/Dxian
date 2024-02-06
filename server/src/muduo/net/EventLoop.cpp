@@ -57,6 +57,10 @@ void EventLoop::quit() {
     quit_ = true;
 }
 
+void EventLoop::runInLoop(muduo::net::EventLoop::Functor cb) {
+
+}
+
 void EventLoop::abortNotInLoopThread() {
 
 }
