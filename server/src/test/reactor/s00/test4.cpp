@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 int cnt = 0;
-muduo::EventLoop* g_loop;
+muduo::net::EventLoop* g_loop;
 
 void printTid()
 {
@@ -28,7 +28,7 @@ void print(const char* msg)
 int main()
 {
     printTid();
-    muduo::EventLoop loop;
+    muduo::net::EventLoop loop;
     g_loop = &loop;
 
     print("main");
