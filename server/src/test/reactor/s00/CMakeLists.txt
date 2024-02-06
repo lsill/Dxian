@@ -13,7 +13,7 @@ function(create_test TARGET_NAME SOURCE_FILE)
 endfunction()
 
 # 使用函数来创建两个测试程序
-create_test(test3 test3.cpp)
+create_test(test4 test4.cpp)
 
 # 设置全局包含目录
 include_directories(${Boost_INCLUDE_DIRS})
