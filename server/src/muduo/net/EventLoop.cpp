@@ -16,7 +16,6 @@
 
 using namespace muduo;
 using namespace muduo::net;
-using namespace muduo::net::sockets;
 
 thread_local EventLoop* t_loopInThisThread = nullptr;
 const int kPollTimeMs = 10000;
