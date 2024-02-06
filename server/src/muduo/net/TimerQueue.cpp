@@ -114,14 +114,14 @@ TimerId TimerQueue::addTimer(TimerCallback cb,
 {
     Timer* timer = new Timer(std::move(cb), when, interval);
     loop_->runInLoop(
-            std::bind(&TimerQueue::addTimerInLoop, this, timer));
-    return TimerId(timer, timer->sequence());
+            [this, timer] { addTimerInLoop(timer); });
+    return {timer, timer->sequence()};
 }
 
 void TimerQueue::cancel(TimerId timerId)
 {
     loop_->runInLoop(
-            std::bind(&TimerQueue::cancelInLoop, this, timerId));
+            [this, timerId] { cancelInLoop(timerId); });
 }
 
 void TimerQueue::addTimerInLoop(Timer* timer)
@@ -140,7 +140,7 @@ void TimerQueue::cancelInLoop(TimerId timerId)
     loop_->assertInLoopThread();
     assert(timers_.size() == activeTimers_.size());
     ActiveTimer timer(timerId.timer_, timerId.sequence_);
-    ActiveTimerSet::iterator it = activeTimers_.find(timer);
+    auto it = activeTimers_.find(timer);
     if (it != activeTimers_.end())
     {
         size_t n = timers_.erase(Entry(it->first->expiration(), it->first));
@@ -180,7 +180,7 @@ std::vector<TimerQueue::Entry> TimerQueue::getExpired(Timestamp now)
     assert(timers_.size() == activeTimers_.size());
     std::vector<Entry> expired;
     Entry sentry(now, reinterpret_cast<Timer*>(UINTPTR_MAX));
-    TimerList::iterator end = timers_.lower_bound(sentry);
+    auto end = timers_.lower_bound(sentry);
     assert(end == timers_.end() || now < end->first);
     std::copy(timers_.begin(), end, back_inserter(expired));
     timers_.erase(timers_.begin(), end);
@@ -233,7 +233,7 @@ bool TimerQueue::insert(Timer* timer)
     assert(timers_.size() == activeTimers_.size());
     bool earliestChanged = false;
     Timestamp when = timer->expiration();
-    TimerList::iterator it = timers_.begin();
+    auto it = timers_.begin();
     if (it == timers_.end() || when < it->first)
     {
         earliestChanged = true;
