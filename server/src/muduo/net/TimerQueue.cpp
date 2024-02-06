@@ -116,14 +116,14 @@ TimerId TimerQueue::addTimer(TimerCallback cb,
 {
     Timer* timer = new Timer(std::move(cb), when, interval);
     loop_->runInLoop(
-            [this, timer] { addTimerInLoop(timer); });
+            std::bind(&TimerQueue::addTimerInLoop, this, timer));
     return {timer, timer->sequence()};
 }
 
 void TimerQueue::cancel(TimerId timerId)
 {
     loop_->runInLoop(
-            [this, timerId] { cancelInLoop(timerId); });
+            std::bind(&TimerQueue::cancelInLoop, this, timerId));
 }
 
 void TimerQueue::addTimerInLoop(Timer* timer)
