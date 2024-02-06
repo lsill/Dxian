@@ -5,6 +5,7 @@
 #include "include/TimerId.h"
 #include "include/Poller.h"
 #include "include/Channel.h"
+#include "include/TimerQueue.h"
 #include "CurrentThread.h"
 #include "Logging.h"
 
@@ -16,7 +17,7 @@ using namespace muduo::net;
 thread_local EventLoop* t_loopInThisThread = nullptr;
 const int kPollTimeMs = 10000;
 
-EventLoop::EventLoop():lopping_(false),threadId_(CurrentThread::tid()),quit_(false), poller_(Poller::newDefaultPoller(this)) {
+EventLoop::EventLoop():looping_(false),threadId_(CurrentThread::tid()),quit_(false), poller_(Poller::newDefaultPoller(this)) {
     LOG_TRACE << "EventLoop created" << this << " in thread" << threadId_;
     if (t_loopInThisThread) {
         LOG_FATAL << "Another EventLoop "<< t_loopInThisThread << "exists in this thread" << threadId_;
@@ -28,7 +29,7 @@ EventLoop::EventLoop():lopping_(false),threadId_(CurrentThread::tid()),quit_(fal
 EventLoop::~EventLoop() {
     // assert是一个宏，用于在运行时对表达式进行断言检查。如果表达式计算为假（即0），
     // assert 宏会导致程序终止，并打印一条错误消息，指出断言失败的文件名和行号。
-    assert(!lopping_);
+    assert(!looping_);
     t_loopInThisThread = nullptr;
 }
 
@@ -37,9 +38,9 @@ EventLoop *EventLoop::getEventLoopOfCurrentThread() {
 }
 
 void EventLoop::loop() {
-    assert(!lopping_);
+    assert(!looping_);
     assertInLoopThread();
-    lopping_ = true;
+    looping_ = true;
     quit_ = false;
     while (!quit_) {
         activeChannels_.clear();
@@ -50,12 +51,30 @@ void EventLoop::loop() {
     }
 
     LOG_TRACE<<"EventLoop "<< this << " stop looping";
-    lopping_ = false;
+    looping_ = false;
 }
 
 void EventLoop::quit() {
     quit_ = true;
 }
+
+TimerId EventLoop::runAt(Timestamp time, TimerCallback cb)
+{
+    return timerQueue_->addTimer(std::move(cb), time, 0.0);
+}
+
+TimerId EventLoop::runAfter(double delay, TimerCallback cb)
+{
+    Timestamp time(addTime(Timestamp::now(), delay));
+    return runAt(time, std::move(cb));
+}
+
+TimerId EventLoop::runEvery(double interval, TimerCallback cb)
+{
+    Timestamp time(addTime(Timestamp::now(), interval));
+    return timerQueue_->addTimer(std::move(cb), time, interval);
+}
+
 
 void EventLoop::runInLoop(muduo::net::EventLoop::Functor cb) {
 
