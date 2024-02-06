@@ -4,7 +4,7 @@
 #include "EventLoop.h"
 #include <stdio.h>
 
-muduo::EventLoop* g_loop;
+muduo::net::EventLoop* g_loop;
 int g_flag = 0;
 
 void run4()
@@ -38,7 +38,7 @@ int main()
 {
     printf("main(): pid = %d, flag = %d\n", getpid(), g_flag);
 
-    muduo::EventLoop loop;
+    muduo::net::EventLoop loop;
     g_loop = &loop;
 
     loop.runAfter(2, run1);
