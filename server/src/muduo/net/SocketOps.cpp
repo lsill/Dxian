@@ -4,7 +4,7 @@
 #include "Logging.h"
 #include "Types.h"
 
-#include "include/SocketsOps.h"
+#include "include/SocketOps.h"
 #include "include/Endian.h"
 
 #include <errno.h>
