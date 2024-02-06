@@ -77,7 +77,10 @@ TimerId EventLoop::runEvery(double interval, TimerCallback cb)
 
 
 void EventLoop::runInLoop(muduo::net::EventLoop::Functor cb) {
-
+    if (isInLoopThread())
+    {
+        cb();
+    }
 }
 
 void EventLoop::abortNotInLoopThread() {
