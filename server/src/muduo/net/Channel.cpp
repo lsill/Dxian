@@ -40,6 +40,10 @@ void Channel::update() {
     loop_->updateChannel(this);
 }
 
+void Channel::remove() {
+
+}
+
 void Channel::handleEvent(muduo::Timestamp receiveTime) {
     if (revents_ & POLLNVAL) {
         LOG_WARN << "Channel::handle_event() POLLNVAL";
