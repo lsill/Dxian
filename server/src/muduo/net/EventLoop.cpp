@@ -27,6 +27,10 @@ namespace
 
     int createEventfd()
     {
+        // 建一个“事件文件描述符”，这个描述符可以用于线程或进程间的事件通知
+        // （0）是这个事件描述符的初始计数值, EFD_NONBLOCK：将文件描述符设置为非阻塞模式。这意味着对这个描述符的read和write操作都会立即返回，而不会阻塞等待。
+        // EFD_CLOEXEC：这是一个“关闭时执行”（close-on-exec）标志，用于指示如果执行了一个exec系统调用（通常是用来在当前进程中启动一个新程序），这个文件描述符应该
+        // 被自动关闭。这是一种安全特性，用于防止新启动的程序无意中接收到不该它处理的文件描述符。
         int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         if (evtfd < 0)
         {
@@ -119,7 +123,7 @@ void EventLoop::loop()
             currentActiveChannel_ = channel;
             currentActiveChannel_->handleEvent(pollReturnTime_);
         }
-        currentActiveChannel_ = NULL;
+        currentActiveChannel_ = nullptr;
         eventHandling_ = false;
         doPendingFunctors();
     }
